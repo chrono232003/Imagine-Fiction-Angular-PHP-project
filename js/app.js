@@ -34,12 +34,29 @@
 	}]);
 
 	app.controller('UserAuthController', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {
-		$scope.getUserInfo = function(user, pass) {
-			$http.get('../php/loginProc.php?User=' + $scope.username + "&Pass=" + $scope.pass).then(function(response) {
-				$scope.catRes = response;
-				$cookies.session = "session";
-				$scope.isSession = $cookie.session;
+		$scope.getUserInfo = () => {
+
+			var request = $http({
+				method: "post",
+				url: "../php/loginProc.php",
+				data: {
+					user: $scope.username,
+					pass: $scope.pass
+				},
+				headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+			})
+
+			request.then(function(response) {
+					console.log("Response: " + response);
+			}).catch(function(e) {
+					console.log("Error: " + e);
 			});
+
+			// $http.get('../php/loginProc.php?User=' + $scope.username + "&Pass=" + $scope.pass).then(function(response) {
+			// 	$scope.catRes = response;
+			// 	$cookies.session = "session";
+			// 	$scope.isSession = $cookie.session;
+			// });
 		};
 	}]);
 })();

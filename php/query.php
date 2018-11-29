@@ -10,6 +10,16 @@ class Query {
   private $indexStories = "SELECT S.Title, S.Story, S.ImagePath, C.Category, U.Username FROM user_stories as S INNER JOIN categories C ON S.CID = C.ID INNER JOIN users U ON S.UID = U.ID";
   private $grabAllCategories = "SELECT Category FROM categories";
 
+  //user query variables
+  private $user;
+  private $pass;
+
+   //user query construct
+   public function __construct($user, $pass) (
+      $this->user = $user;
+      $this->pass = $pass;
+     )
+
   //query functions
   public function selectQuery($statement) {
         include 'connection.php';
