@@ -9,7 +9,7 @@ class Query {
 
   private $indexStories = "SELECT S.ID, S.Title, S.Story, S.ImagePath, C.Category, U.Username FROM user_stories as S INNER JOIN categories C ON S.CID = C.ID INNER JOIN users U ON S.UID = U.ID";
   private $grabAllCategories = "SELECT * FROM categories";
-  private $getStory = "SELECT S.Title, S.Story, S.ImagePath, C.Category, U.Username FROM user_stories as S INNER JOIN categories C ON S.CID = C.ID INNER JOIN users U ON S.UID = U.ID";
+  private $getStoryBase = "SELECT S.Title, S.Story, S.ImagePath, C.Category, U.Username FROM user_stories as S INNER JOIN categories C ON S.CID = C.ID INNER JOIN users U ON S.UID = U.ID";
 
 
   //statement getter functions
@@ -77,30 +77,49 @@ class Query {
     }
 
   public function submitUserRegistration($email, $user, $pass) {
-    include 'connection.php';
-    $query = "INSERT INTO user_stories(`Email`, `Username`, `Password`) VALUES (''$email', '$user', '$pass')";
-
-    $result = mysqli_query($con, $query)
-          or die('Could not execute login query');
-
-          $num = (mysqli_num_rows($result));
-          if ($num > 0){
-            while($row = mysqli_fetch_assoc($result)) {
-              echo json_encode($row);
-            };
-          }
+    $k = array("Email", "Username", "Password");
+    $v = array($email, $user, $pass);
+    echo $this->insertQuery($k, $v);
   }
 
     public function submitStory($title, $genre, $content) {
+      $k = array("CID", "UID", "Title", "Story", "ImagePath");
+      $v = array($genre, "1", $title, $content, "TestImage.jpg");
+      echo $this->insertQuery($k, $v);
+    }
+
+    /*
+     * below are base queries used as models.
+     * the form queries can effectively use these in their methods.
+     */
+
+    private function insertQuery($arrayOfColNames, $arrayOfValues) {
       include 'connection.php';
-      $_title = mysqli_real_escape_string($con, $title);
-      $_genre = mysqli_real_escape_string($con, $genre);
-      $_content = mysqli_real_escape_string($con, $content);
-      $query = "INSERT INTO user_stories(`CID`, `UID`, `Title`, `Story`, `ImagePath`) VALUES ($_genre, 1, '$_title', '$_content', 'Draculasguest.jpg')";
+
+      $colNameList = "";
+      $valueList = "";
+
+      //loop through array col names and values and condition to add to the insertion query. The loop goes from the value list but both lists should be same size.
+      $arrLength = count($arrayOfValues);
+      for ($x = 0; $x < $arrLength; $x++) {
+
+        //condition value and store to variable
+        $value = mysqli_real_escape_string($con,$arrayOfValues[$x]);
+
+        if(($x + 1) == $arrLength) {
+          $colNameList = $colNameList . "`$arrayOfColNames[$x]`";
+          $valueList = $valueList . "'$value'";
+        } else {
+          $colNameList = $colNameList . "`$arrayOfColNames[$x]`" . ",";
+          $valueList = $valueList . "'$value'" . ",";
+        }
+      }
+
+      $query = "INSERT INTO user_stories($colNameList) VALUES ($valueList)";
       if (mysqli_query($con, $query)) {
-        echo "Records inserted successfully.";
+        return "Records inserted successfully. " . $query;
       } else{
-        echo "ERROR: Could not execute query: " . mysqli_error($con);
+        return "ERROR: Could not execute query: " . mysqli_error($con);
       }
     }
 }

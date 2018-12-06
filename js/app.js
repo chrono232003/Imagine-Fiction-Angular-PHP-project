@@ -152,8 +152,8 @@
 			method: "post",
 			url: "php/register.php",
 			data: {
-				user: $scope.username,
 				email: $scope.email,
+				user: $scope.username,
 				password: $scope.psw
 			},
 			headers: {'Content-Type': 'application/x-www-form-urlencoded' }
