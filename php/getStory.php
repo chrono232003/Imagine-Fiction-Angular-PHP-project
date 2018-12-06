@@ -1,5 +1,5 @@
 <?php
-require_once('query.php');
+require_once('queryClasses/query.php');
 $query = new Query();
 
 $postData = file_get_contents("php://input");
