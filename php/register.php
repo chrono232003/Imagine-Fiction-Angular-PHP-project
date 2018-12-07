@@ -37,7 +37,7 @@
   $to_email = $request->email;
   $subject = 'Imagine Fiction Email Verification';
   $message = emailContent("http://localhost/Imagine-Fiction-Angular-PHP-project/verifyUser.html?verify=", $user_email_key);
-  $headers = 'From: noreply@imaginefiction.com';
+  $headers = 'From: noreply@fictionup.com';
   //check if the email address is invalid $secure_check
   $secure_check = sanitize_my_email($to_email);
   if ($secure_check == false) {

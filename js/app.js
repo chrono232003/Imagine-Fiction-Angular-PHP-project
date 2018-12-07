@@ -73,6 +73,19 @@
 
 //controllers
 	app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
+
+		function matrixList(data, n) {
+        var grid = [], i = 0, x = data.length, col, row = -1;
+        for (var i = 0; i < x; i++) {
+            col = i % n;
+            if (col === 0) {
+                grid[++row] = [];
+            }
+            grid[row][col] = data[i];
+        }
+        return grid;
+			};
+
 		function conditionStoryHomePage(data) {
 			for (var i = 0; i < data.length; i++) {
 				data[i].Story = data[i].Story.substring(0,500) + "<a href = 'story.html?ID=" + data[i].ID + "'> ... Read More</a>";
@@ -82,6 +95,7 @@
 		$http.get('php/story.php').then(function(response) {
 				var storyData = conditionStoryHomePage(response.data);
 				$scope.storyList = storyData;
+				$scope.repeatRow = matrixList(response.data, 2);
 			}).catch(function(e) {
 					console.log("Error: " + e);
 			});

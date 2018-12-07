@@ -1,6 +1,6 @@
 <?php
 // Create connection
-$con=mysqli_connect("localhost","root","","imagine_fiction");
+$con=mysqli_connect("localhost","root","","playolds_fiction_up");
 
 // Check connection
 if (mysqli_connect_errno()) {
