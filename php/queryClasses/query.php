@@ -42,15 +42,15 @@ class Query extends QueryBase{
    }
 
   public function queryUserLogin($user, $pass) {
-    $colsToQuery = array("username", "password");
-    $arrayOfParams = array($user, $pass);
+    $colsToQuery = array("username", "password", "active");
+    $arrayOfParams = array($user, $pass, 1);
     echo $this->selectQueryWithParameters($this->getUserBase, $colsToQuery, $arrayOfParams);
   }
 
   public function queryUserKeyVerify($key) {
     $colsToQuery = array("VerifyKey");
     $arrayOfParams = array($key);
-    echo $this->selectQueryWithParameters($this->verifyUserKeyBase, $colsToQuery, $arrayOfParams);
+    echo $this->verifyUserQuery($this->verifyUserKeyBase, $colsToQuery, $arrayOfParams);
   }
 
 public function submitUserRegistration($email, $user, $pass, $key) {

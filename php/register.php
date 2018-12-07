@@ -28,7 +28,7 @@
 
   function emailContent($urlBase, $randString) {
     $link = $urlBase . "" . $randString;
-    $content = "Thank you for registering with us at Imagine Fiction! </br> Please click the link below to verify your email.</br><a href='$link'>$link</a>";
+    $content = "Thank you for registering with us at Imagine Fiction! Please click the link included here to verify your email. $link";
     return $content;
   }
 
@@ -36,7 +36,7 @@
 
   $to_email = $request->email;
   $subject = 'Imagine Fiction Email Verification';
-  $message = emailContent("http://localhost/Imagine-Fiction-Angular-PHP-project/verifyUser.html?verify=", $user_email_key);
+  $message = emailContent($request->baseUrl . "/verifyUser.html?verify=", $user_email_key);
   $headers = 'From: noreply@fictionup.com';
   //check if the email address is invalid $secure_check
   $secure_check = sanitize_my_email($to_email);

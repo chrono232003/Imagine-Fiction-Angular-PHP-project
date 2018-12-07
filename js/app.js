@@ -187,6 +187,9 @@
 	}]);
 
 	app.controller('RegistrationController', ['$scope', '$http', function($scope, $http) {
+		function getbaseUrl() {
+			return  window.location.origin;
+		}
 		$scope.setRegistration = () => {
 		var request = $http({
 			method: "post",
@@ -194,13 +197,15 @@
 			data: {
 				email: $scope.email,
 				user: $scope.username,
-				password: $scope.psw
+				password: $scope.psw,
+				baseUrl: getbaseUrl()
+
 			},
 			headers: {'Content-Type': 'application/x-www-form-urlencoded' }
 		})
 
 		request.then(function(response) {
-				$scope.story = response.data[0];
+				window.location.replace(getbaseUrl() + "/UserEmailSent.html");
 		}).catch(function(e) {
 				console.log("Error: " + e);
 		});
@@ -212,7 +217,7 @@
 			var IDString = window.location.search;
 			return IDString.substring(IDString.indexOf("=")+1);
 		}
-		$scope.setRegistration = () => {
+		//$scope.setRegistration = () => {
 		var request = $http({
 			method: "post",
 			url: "php/verifyUser.php",
@@ -223,11 +228,11 @@
 		})
 
 		request.then(function(response) {
-				$scope.story = response.data[0];
+				$scope.verification = response.data;
 		}).catch(function(e) {
 				console.log("Error: " + e);
 		});
-	};
+	//};
 	}]);
 
 })();

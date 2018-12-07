@@ -5,5 +5,5 @@
   $postData = file_get_contents("php://input");
   $request = json_decode($postData);
 
-  echo queryUserKeyVerify($request->key);
+  echo $query->queryUserKeyVerify($request->key);
 ?>
