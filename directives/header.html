@@ -1,31 +1,38 @@
-<nav class="navbar navbar-default navbar-fixed-top">
-	<div class = "navbar-header">
-		<a class = "navbar-brand" href = "#">Find Stories!</a>
-    </div>
+<div ng-controller="UserAuthController">
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class = "navbar-header">
+			<a class = "navbar-brand" href = "search.html">Find Stories!</a>
+	    </div>
 
-    <div>
-	    <ul class = "nav navbar-nav">
-			<li class = "active"><a href = "index.html">Home</a></li>
-			<li><a href = "categories.html">By Category</a></li>
-	    </ul>
-    </div>
-</nav>
-<div class = "jumbotron">
-	<!-- LOGIN FORM -->
-	<div class = "formHome" ng-hide="{{isSession == 'session'}}">
-		<form name="loginForm" class = "form-inline" ng-submit="loginForm.$valid && getUserInfo()" ng-controller="UserAuthController" novalidate>
-		<div class="form-group">
-			<label class = "control-label" for="username">Login</label>
-			<input type="text" ng-model="username" class="form-control" id="username" placeholder="Login" required>
-		</div>
-		<div class="form-group">
-			<label  class = "control-label" for="pass">Password</label>
-			<input type="password" ng-model="pass" class="form-control" id="pass" placeholder="Password" required>
-		</div>
-		<button type="submit" class="btn btn-default">Submit</button>
-		<a href="register.html" class="btn btn-link">Register</a>
-		</form>
+	    <div>
+		    <ul class = "nav navbar-nav">
+				<li class = "active"><a href = "index.html">Home</a></li>
+				<li><a href = "categories.html">By Category</a></li>
+				<li ng-show="isSession"><a href = "writestory.html">Write A Story</a></li>
+		    </ul>
+	    </div>
+	</nav>
+	<div class = "jumbotron">
+		<!-- LOGIN FORM -->
+		<!-- <div class = "formHome" ng-hide="{{isSession}}" ng-controller="UserAuthController"> -->
+		<!-- <div ng-controller="UserAuthController"> -->
+			<div class = "formHome">
+				<form name="loginForm" class = "form-inline" ng-submit="loginForm.$valid && getUserInfo()" ng-show="!isSession" novalidate>
+					<div class="form-group">
+						<label class = "control-label" for="username">Login</label>
+						<input type="text" ng-model="username" class="form-control" id="username" placeholder="Login" required>
+					</div>
+					<div class="form-group">
+						<label  class = "control-label" for="pass">Password</label>
+						<input type="password" ng-model="pass" class="form-control" id="pass" placeholder="Password" required>
+					</div>
+					<button type="submit" class="btn btn-default">Submit</button>
+					<a href="register.html" class="btn btn-link">Register</a>
+				</form>
+			 <div ng-show="isSession"><span>Welcome {{username}}! </span><a href="#" ng-click="logout()">Logout</a></div>
+			</div>
+		<!-- </div> -->
+		<h1>Imagine Fiction</h1>
+		<p>Stories from the Heart and Imagination</p>
 	</div>
-	<h1>Imagine Fiction</h1>
-	<p>Stories from the Heart and Imagination</p>
 </div>

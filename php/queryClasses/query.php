@@ -16,6 +16,7 @@ class Query extends QueryBase{
   private $storyBase = "SELECT S.Title, S.Story, S.ImagePath, C.Category, U.Username FROM user_stories as S INNER JOIN categories C ON S.CID = C.ID INNER JOIN users U ON S.UID = U.ID";
   private $storiesByCategoryBase = "SELECT S.ID, S.Title, S.Story, S.ImagePath, U.Username FROM user_stories as S INNER JOIN  users U ON S.UID = U.ID";
   private $getUserBase = "SELECT Username FROM users";
+  private $verifyUserKeyBase = "SELECT VerifyKey FROM users";
 
   //statement getter functions
   public function getIndexStories()
@@ -46,16 +47,22 @@ class Query extends QueryBase{
     echo $this->selectQueryWithParameters($this->getUserBase, $colsToQuery, $arrayOfParams);
   }
 
-public function submitUserRegistration($email, $user, $pass) {
-  $k = array("Email", "Username", "Password");
-  $v = array($email, $user, $pass);
-  echo $this->insertQuery($k, $v);
+  public function queryUserKeyVerify($key) {
+    $colsToQuery = array("VerifyKey");
+    $arrayOfParams = array($key);
+    echo $this->selectQueryWithParameters($this->verifyUserKeyBase, $colsToQuery, $arrayOfParams);
+  }
+
+public function submitUserRegistration($email, $user, $pass, $key) {
+  $k = array("Email", "Username", "Password", "VerifyKey");
+  $v = array($email, $user, $pass, $key);
+  echo $this->insertQuery('users', $k, $v);
 }
 
   public function submitStory($title, $genre, $content) {
     $k = array("CID", "UID", "Title", "Story", "ImagePath");
     $v = array($genre, "1", $title, $content, "TestImage.jpg");
-    echo $this->insertQuery($k, $v);
+    echo $this->insertQuery('user_stories', $k, $v);
   }
 }
 ?>

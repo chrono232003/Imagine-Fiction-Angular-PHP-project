@@ -16,6 +16,61 @@
 		}
 	});
 
+	//form validation directives
+	app.directive('valueMatches', ['$parse', function ($parse) {
+    return {
+      require: 'ngModel',
+        link: function (scope, elm, attrs, ngModel) {
+          var originalModel = $parse(attrs.valueMatches),
+              secondModel = $parse(attrs.ngModel);
+          // Watch for changes to this input
+          scope.$watch(attrs.ngModel, function (newValue) {
+            ngModel.$setValidity(attrs.name, newValue === originalModel(scope));
+          });
+          // Watch for changes to the value-matches model's value
+          scope.$watch(attrs.valueMatches, function (newValue) {
+            ngModel.$setValidity(attrs.name, newValue === secondModel(scope));
+          });
+        }
+      };
+    }]);
+
+ app.controller('UserAuthController', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {
+
+	 $scope.isSession = $cookies.get('session');
+	 $scope.username = $cookies.get('username');
+
+	 $scope.getUserInfo = () => {
+		 var request = $http({
+			 method: "post",
+			 url: "php/loginProc.php",
+			 data: {
+				 user: $scope.username,
+				 pass: $scope.pass
+			 },
+			 headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+		 })
+
+		 request.then(function(response) {
+				 $scope.userResponse = response.data;
+				 //$cookies.session = response.data[0].Username;
+				 $cookies.put('username', response.data[0].Username)
+				 $cookies.put('session', true)
+				 $scope.isSession = $cookies.get('session');
+				 $scope.username = $cookies.get('username');
+		 }).catch(function(e) {
+				 console.log("Error: " + e);
+		 });
+	 };
+
+	 $scope.logout = () => {
+		 $cookies.remove('username');
+		 $cookies.remove('session');
+		 location.reload();
+	 }
+
+ }]);
+
 //controllers
 	app.controller('StoryController', ['$scope', '$http', function($scope, $http) {
 		function conditionStoryHomePage(data) {
@@ -96,35 +151,6 @@
 		};
 	}]);
 
-	app.controller('UserAuthController', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {
-		$scope.getUserInfo = () => {
-
-			var request = $http({
-				method: "post",
-				url: "php/loginProc.php",
-				data: {
-					user: $scope.username,
-					pass: $scope.pass
-				},
-				headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-			})
-
-			request.then(function(response) {
-				 	$scope.catRes = response;
-					$cookies.session = "session";
-					$scope.isSession = $cookie.session;
-			}).catch(function(e) {
-					console.log("Error: " + e);
-			});
-
-			// $http.get('../php/loginProc.php?User=' + $scope.username + "&Pass=" + $scope.pass).then(function(response) {
-			// 	$scope.catRes = response;
-			// 	$cookies.session = "session";
-			// 	$scope.isSession = $cookie.session;
-			// });
-		};
-	}]);
-
 	app.controller('GetStoryController', ['$scope', '$http', function($scope, $http) {
 		function getStoryID() {
 			var IDString = window.location.search;
@@ -155,6 +181,29 @@
 				email: $scope.email,
 				user: $scope.username,
 				password: $scope.psw
+			},
+			headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+		})
+
+		request.then(function(response) {
+				$scope.story = response.data[0];
+		}).catch(function(e) {
+				console.log("Error: " + e);
+		});
+	};
+	}]);
+
+	app.controller('UserVerificationController', ['$scope', '$http', function($scope, $http) {
+		function getKey() {
+			var IDString = window.location.search;
+			return IDString.substring(IDString.indexOf("=")+1);
+		}
+		$scope.setRegistration = () => {
+		var request = $http({
+			method: "post",
+			url: "php/verifyUser.php",
+			data: {
+				key: getKey()
 			},
 			headers: {'Content-Type': 'application/x-www-form-urlencoded' }
 		})

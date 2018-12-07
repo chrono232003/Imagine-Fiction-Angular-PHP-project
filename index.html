@@ -10,13 +10,13 @@
 	</head>
 	<body>
 		<header></header>
-		
+
 		<div ng-controller="StoryController as stories">
 			<div ng-repeat="story in storyList">
 				<div class = "col-md-6">
 					<h2> {{story.Title}} </h2>
 					<div id = "row">
-						<div ng-hide="{{story.Pic}} == ''" class = "col-md-2">
+						<div ng-hide="{{story.Pic}} === ''" class = "col-md-2">
 							<img style = "max-height: 75px;" src = "images/{{story.ImagePath}}">
 						</div>
 						<div class = "col-md-10">

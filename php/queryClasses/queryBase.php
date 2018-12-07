@@ -29,25 +29,27 @@ class QueryBase {
         if(($x + 1) == $arrLength) {
           $conditions = $conditions . "$colsToQuery[$x] = '$param'";
         } else {
-          $conditions = $conditions . "$colsToQuery[$x] = '$param' AND";
+          $conditions = $conditions . "$colsToQuery[$x] = '$param' AND ";
         }
       }
 
       $query = $statement . " WHERE " . $conditions;
       $result = mysqli_query($con, $query);
-
-      header('Content-Type: application/json');
-      $rows = array();
-      while ($row = mysqli_fetch_assoc($result)) {
-        $rows[] = $row;
+      if ($result) {
+        header('Content-Type: application/json');
+        $rows = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+          $rows[] = $row;
+        }
+        return json_encode($rows);
       }
-      return json_encode($rows);
+      return json_encode("{'empty':'No Data Found'}");
     }
 
 
 
 
-  public function insertQuery($arrayOfColNames, $arrayOfValues) {
+  public function insertQuery($tableName, $arrayOfColNames, $arrayOfValues) {
     include 'connection.php';
 
     $colNameList = "";
@@ -69,7 +71,7 @@ class QueryBase {
       }
     }
 
-    $query = "INSERT INTO user_stories($colNameList) VALUES ($valueList)";
+    $query = "INSERT INTO $tableName($colNameList) VALUES ($valueList)";
     if (mysqli_query($con, $query)) {
       return "Records inserted successfully. " . $query;
     } else{

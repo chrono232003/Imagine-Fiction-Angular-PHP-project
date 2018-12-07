@@ -27,7 +27,7 @@ body {
 }
 
 /* Full-width input fields */
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=email] {
     width: 100%;
     padding: 15px;
     margin: 5px 0 22px 0;
@@ -36,7 +36,7 @@ input[type=text], input[type=password] {
     background: #f1f1f1;
 }
 
-input[type=text]:focus, input[type=password]:focus {
+input[type=text]:focus, input[type=password]:focus,  input[type=email]:focus {
     background-color: #ddd;
     outline: none;
 }
@@ -82,20 +82,23 @@ a {
         <hr>
 
         <label for="email"><b>Email</b></label>
-        <input type="text" placeholder="Enter Email" ng-model="email" name="email" required>
+        <input type="email" placeholder="Enter Email" ng-model="email" name="email" required/>
+				<p style = "color:red;" ng-show="registrationForm.email.$touched && registrationForm.email.$invalid">Email is required.</p>
 
         <label for="username"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" ng-model="username" name="username" required>
+        <input type="text" placeholder="Enter Username" ng-model="username" name="username" ng-minlength="7" ng-maxlength="15" required>
+				<p style = "color:red;" ng-show="registrationForm.username.$touched && registrationForm.username.$invalid">Username is required and must be between 7-15 characters.</p>
 
         <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" ng-model="psw" name="psw" required>
+        <input type="password" placeholder="Enter Password" ng-model="psw" name="psw" ng-minlength="7" ng-maxlength="20" required>
+				<p style = "color:red;" ng-show="registrationForm.username.$touched && registrationForm.username.$invalid">Passwerd is required and must be between 7-20 characters.</p>
 
-        <label for="psw-repeat"><b>Repeat Password</b></label>
-        <input type="password" placeholder="Repeat Password" ng-model="psw-repeat" name="psw-repeat" required>
+        <!-- <label for="psw-repeat"><b>Repeat Password</b></label>
+        <input type="password" placeholder="Repeat Password" ng-model="psw-repeat" name="psw-repeat" required> -->
         <hr>
-        <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+        <p>By creating an account you agree to our <a href="#">Terms & Privacy</a></p>
 
-        <button type="submit" class="registerbtn">Register</button>
+        <button type="submit" ng-disabled=registrationForm.$invalid class="registerbtn">Register</button>
       </div>
 
       <div class="container signin">
